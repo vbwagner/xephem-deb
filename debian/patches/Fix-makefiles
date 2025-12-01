@@ -1,0 +1,69 @@
+Description: Fix makefiles for build deb package
+ Add _XOPEN_SOURCE define to GUI/xephem/Makefile for gcc to be able
+ to find wait3 and strptime.
+ .
+ Add toplevel makefile with proper clean and install targets
+ .`
+ xephem (4.2.0-1) UNRELEASED; urgency=medium
+ .
+   * Initial release. (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+Author: Victor Wagner <vitus@wagner.pp.ru>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout https://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: (upstream|backport|vendor|other), (<patch-url>|commit:<commit-id>)
+Bug: <upstream-bugtracker-url>
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: (no|not-needed|<patch-forwarded-url>)
+Applied-Upstream: <version>, (<commit-url>|commit:<commid-id>)
+Reviewed-By: <name and email of someone who approved/reviewed the patch>
+Last-Update: 2025-12-01
+
+Index: xephem-4.2.0/GUI/xephem/Makefile
+===================================================================
+--- xephem-4.2.0.orig/GUI/xephem/Makefile
++++ xephem-4.2.0/GUI/xephem/Makefile
+@@ -38,7 +38,7 @@ endif
+ 
+ CC = gcc
+ CLDFLAGS = -g
+-CFLAGS = $(LIBINC) $(CLDFLAGS) -O2 -Wall -I$(MOTIFI) $(PLATI)
++CFLAGS = $(LIBINC) $(CLDFLAGS) -O2 -Wall -I$(MOTIFI) $(PLATI) -D_XOPEN_SOURCE=500
+ LDFLAGS = $(LIBLNK) $(CLDFLAGS) -L$(MOTIFL) $(PLATL)
+ XLIBS = -lXm -lXt -lXext -lXmu -lX11
+ LIBS = $(XLIBS) $(LIBLIB) -lm -lssl
+Index: xephem-4.2.0/Makefile
+===================================================================
+--- /dev/null
++++ xephem-4.2.0/Makefile
+@@ -0,0 +1,26 @@
++#
++# Toplevel Makefile, created to simplify building of debian package
++#
++#
++PREFIX ?= /usr
++SHAREDIR=$(PREFIX)/share/xephem
++build:
++	$(MAKE) -C GUI/xephem libs xephem
++
++clean:
++	$(MAKE) -C GUI/xephem clobber
++	rm -f xephem.conf
++	rm -f lib*/*.a
++
++xephem.conf:
++	echo "XEphem.ShareDir: $(SHAREDIR)" > $@
++
++install: xephem.conf
++	install -d $(DESTDIR)$(PREFIX)/bin
++	install -m 755  GUI/xephem/xephem $(DESTDIR)$(PREFIX)/bin
++	install -d $(DESTDIR)$(PREFIX)/share/man/man1
++	install -m 644 GUI/xephem/xephem.man $(DESTDIR)$(PREFIX)/share/man/man1/xephem.1
++	install -d 755 $(DESTDIR)/$(SHAREDIR)
++	cd GUI/xephem && cp -R auxil catalogs fifos fits gallery help lo $(DESTDIR)$(SHAREDIR)
++	install -d 755 $(DESTDIR)/etc
++	install -m 644 xephem.conf $(DESTDIR)/etc/XEphem
