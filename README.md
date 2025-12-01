@@ -49,5 +49,8 @@ How to build debian package from this packaging file
 
 ## TODO
 
-It would be nice to use system libz, libpng and libjpeg instead of
+1. It would be nice to use system libz, libpng and libjpeg instead of
 bundled ones. But even without this package suites my needs.
+2. May be it would be good idea to split package into
+   architecture-dependent `xephem` and architecture-independent
+   `xephem-data`. 
