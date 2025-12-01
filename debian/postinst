@@ -1,0 +1,8 @@
+#!/bin/sh -e
+FIFODIR=/usr/share/xephem/fifos
+if [ "$1" = "configure" ]; then
+ for fifo in xephem_loc_fifo xephem_db_fifo xephem_in_fifo xephem_out_fifo; do
+ 	[ -e "$FIFODIR/$fifo" ]||mkfifo -m 666 "$FIFODIR/$fifo"
+ done
+fi
+

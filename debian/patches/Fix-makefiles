@@ -40,7 +40,7 @@ Index: xephem-4.2.0/Makefile
 ===================================================================
 --- /dev/null
 +++ xephem-4.2.0/Makefile
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,28 @@
 +#
 +# Toplevel Makefile, created to simplify building of debian package
 +#
@@ -63,7 +63,9 @@ Index: xephem-4.2.0/Makefile
 +	install -m 755  GUI/xephem/xephem $(DESTDIR)$(PREFIX)/bin
 +	install -d $(DESTDIR)$(PREFIX)/share/man/man1
 +	install -m 644 GUI/xephem/xephem.man $(DESTDIR)$(PREFIX)/share/man/man1/xephem.1
-+	install -d 755 $(DESTDIR)/$(SHAREDIR)
-+	cd GUI/xephem && cp -R auxil catalogs fifos fits gallery help lo $(DESTDIR)$(SHAREDIR)
++	install -d 755 $(DESTDIR)$(SHAREDIR)
++	cd GUI/xephem && cp -R auxil catalogs fits gallery help lo $(DESTDIR)$(SHAREDIR)
++	install -d 755 $(DESTDIR)$(SHAREDIR)/fifos
++	install -m 644 GUI/xephem/fifos/README $(DESTDIR)$(SHAREDIR)/fifos
 +	install -d 755 $(DESTDIR)/etc
 +	install -m 644 xephem.conf $(DESTDIR)/etc/XEphem

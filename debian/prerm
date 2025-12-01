@@ -1,0 +1,7 @@
+#!/bin/sh -e
+# We remove fifos here to let dpkg remove empty fifodir
+FIFODIR=/usr/share/xephem/fifos
+if [ "$1" = "remove" ]&&[ -z "$2" ]; then
+	(cd "$FIFODIR" && 
+	rm -f xephem_loc_fifo xephem_db_fifo xephem_in_fifo xephem_out_fifo)
+fi
